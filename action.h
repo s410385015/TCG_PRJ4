@@ -16,7 +16,9 @@ public:
 public:
 	virtual board::reward apply(board& b) const {
 		auto proto = entries().find(type());
+		//std::cout<<"?"<<std::endl;
 		if (proto != entries().end()) return proto->second->reinterpret(this).apply(b);
+		//std::cout<<"!"<<std::endl;
 		return -1;
 	}
 	virtual std::ostream& operator >>(std::ostream& out) const {
@@ -57,6 +59,7 @@ public:
 	slide(const action& a = {}) : action(a) {}
 public:
 	board::reward apply(board& b) const {
+
 		return b.slide(event());
 	}
 	std::ostream& operator >>(std::ostream& out) const {
@@ -92,6 +95,9 @@ public:
 public:
 	board::reward apply(board& b) const {
 		int r=b.place(position(), tile(),nextTile());
+		//std::cout<<position()<<std::endl;
+		//std::cout<<tile()<<std::endl;
+		//std::cout<<b<<std::endl;
 		//std::cout<<"??:"<<r<<std::endl;
 		return r;
 	}

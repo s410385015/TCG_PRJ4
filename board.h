@@ -55,7 +55,7 @@ public:
 	reward place(unsigned pos, cell tile,cell next) {
 		//std::cout<<"!!:"<<pos<<" "<<tile<<" "<<next<<std::endl;
 		if (pos >= 16) return -1;
-		if (tile != 1 && tile != 2 && tile != 3) return -1;
+		//if (tile != 1 && tile != 2 && tile != 3) return -1;
 		operator()(pos) = tile;
 		nextTile=next;
 		return 0;
@@ -67,6 +67,8 @@ public:
 	 */
 	reward slide(unsigned opcode) {
 		last_move=opcode&0b11;
+
+		//std::cout<<last_move<<std::endl;
 		switch (opcode & 0b11) {
 		case 0: return slide_up();
 		case 1: return slide_right();
@@ -165,7 +167,15 @@ public:
 		case 3: rotate_left(); break;
 		}
 	}
-
+	cell GetMaxTile()const
+	{
+		cell t=0;
+		for(int i=0;i<4;i++)
+			for(int j=0;j<4;j++)
+				if(tile[i][j]>t)
+					t=tile[i][j];
+		return t;
+	}
 	void rotate_right() { transpose(); reflect_horizontal(); } // clockwise
 	void rotate_left() { transpose(); reflect_vertical(); } // counterclockwise
 	void reverse() { reflect_horizontal(); reflect_vertical(); }

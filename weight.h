@@ -147,17 +147,22 @@ class state{
 			board after;
 			float value;
 			int reward;
-
+			int hint;
+			int last;
 		public:
 			state(){}
 			board GetAfter() const { return after; }
 			board GetBefore() const { return before; }
 			float GetValue() const { return value; }
 			int GetReward() const { return reward; }
+			int GetHint() const{return hint;}
+			int GetLast() const{return last;}
 
 			void SetBefore(const board& b) { before = b; }
 			void SetAfter(const board& b) { after = b; }
 			void SetValue(float v) { value = v; }
 			void SetReward(int r) { reward = r; }
+			void SetHint(int h){hint=h;}
+			void SetLast(int l){last=l;}
 
 };

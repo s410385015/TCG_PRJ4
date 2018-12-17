@@ -30,6 +30,7 @@ public:
 	}
 	bool apply_action(action move) {
 		board::reward reward = move.apply(state());
+		
 		if (reward == -1) return false;
 		ep_moves.emplace_back(move, reward, millisec() - ep_time);
 		ep_score += reward;

@@ -68,15 +68,18 @@ public:
 		space_each_op({12,13,14,15,0,4,8,12,0,1,2,3,3,7,11,15})
 		{}
 
+
 	virtual action take_action(const board& after) {
 		
+
+		total++;
 		std::shuffle(space.begin(), space.end(), engine);
 		if(bags.size() <2) FillIn();
 		
-		board::cell tile = bags.front();
-		bags.pop_front();
+	
+		board::cell tile=GenerateTile(after);
 		int last_move=after.getLastMove();
-		//std::cout<<bags.size()<<" "<<bags.back()<<std::endl;
+		//std::cout<<last_move<<std::endl;
 
 		if(last_move==-1){
 			for (int pos : space) {
@@ -89,17 +92,55 @@ public:
 			std::shuffle(space_each_op[last_move].begin(), space_each_op[last_move].end(), engine);
 			for(int pos : space_each_op[last_move])
 			{
+				//std::cout<<pos<<" ";
 				if (after(pos) != 0) continue;			
 				return action::place(pos, tile,bags.front());
 			}
 		}
 		return action();
 	}
+
+
+
+	board::cell GenerateTile(const board& b)
+	{
+		board::cell max_tile=b.GetMaxTile();
+		
+		board::cell tile=-1;
+		if(max_tile>=7){
+
+		
+			if((rand()%21==0)&&((bonus+1)/total)<(1.0/21.0))
+			{
+				tile=4+rand()%(max_tile-7+1);
+				bonus++;
+			}
+			else
+			{
+				tile= bags.front();
+				bags.pop_front();
+				
+			}
+			
+		}
+		else
+		{
+		 	tile= bags.front();
+			bags.pop_front();
+			//std::cout<<"?"<<std::endl;
+		}
+		//std::cout<<max_tile<<std::endl;
+		//std::cout<<tile<<std::endl;
+		return tile;
+	}
+
+
+
 	void FillIn()
 	{	
-		std::array<int,3> tmp{1,2,3};
+		std::array<int,12> tmp{1,1,1,1,2,2,2,2,3,3,3,3};
 		std::shuffle(tmp.begin(),tmp.end(),engine);
-		for(int i=0;i<3;i++)
+		for(int i=0;i<12;i++)
 			bags.push_back(tmp[i]);
 			
 	}
@@ -107,12 +148,14 @@ public:
 	{
 		bags.clear();
 		FillIn();
+		total=bonus=0;
 	}
 private:
 	std::array<int, 16> space;
 	std::array<std::array<int,4>,4> space_each_op;
 	std::deque<int> bags;
-	
+	float total;
+	float bonus;
 };
 
 /**
@@ -184,7 +227,7 @@ public:
 
 	action SelectMove(const board& before)
 	{
-		board:: reward _max=-1;
+		board:: reward _max=INT_MIN;
 		action act=action();
 		
 		state move;
@@ -194,6 +237,7 @@ public:
 		for (int op : opcode) {
 			board after(before);
 			board::reward reward = after.slide(op);
+			//std::cout<<op<<" "<<reward<<std::endl;
 			if (reward == -1)
 				continue;
 

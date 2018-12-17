@@ -82,14 +82,18 @@ int main(int argc, const char* argv[]) {
 			
 			agent& who = game.take_turns(play, evil);
 			action move = who.take_action(game.state());
-			
-			if (game.apply_action(move) != true) break;
-			if (who.check_for_win(game.state())) break;
-			//std::cout<<game.state()<<std::endl;
-			//getchar();
 
+			//std::cout<<who.name()<<std::endl;
+
+			if (game.apply_action(move) != true) break;
+			//std::cout<<"?"<<std::endl;
+			if (who.check_for_win(game.state())) break;
+			
 			
 		}
+
+		//std::cout<<game.state()<<std::endl;
+		//getchar();
 		agent& win = game.last_turns(play, evil);
 		play.TD_update();
 		stat.close_episode(win.name());
@@ -105,7 +109,7 @@ int main(int argc, const char* argv[]) {
 		}
 	}
 
-	play.TD_save();
+	//play.TD_save();
 	if (summary) {
 		stat.summary();
 	}

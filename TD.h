@@ -10,9 +10,11 @@
 
 class TD{
     private:
-        std::vector<weight*> weights;
+        std::vector<vector<weight*>> weights;
     public:
-        TD(){}
+        TD(){
+        
+        }
         ~TD(){}
     
         void add(weight* w){
